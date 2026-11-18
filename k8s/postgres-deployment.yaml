@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenderflow-postgres
+  labels:
+    app: tenderflow-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tenderflow-postgres
+  template:
+    metadata:
+      labels:
+        app: tenderflow-postgres
+    spec:
+      containers:
+        - name: tenderflow-postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: tenderflow_db
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: "1111"
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-storage
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: tenderflow-postgres-pvc

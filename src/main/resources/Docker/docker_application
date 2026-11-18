@@ -1,0 +1,213 @@
+1) first i need create a network :
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker network create tenderflow-net
+	
+	i will find this response = 3c99abc48b3b401712fe5643aa7201153186e932b3dc8b73567d410218acef4a
+	
+2) i will create container postgreSQL :
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker run --name tenderflow-postgres --network tenderflow-net -e POSTGRES_DB=tenderflow_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=1111 -p 5432:5432 postgres:17
+	
+	Or
+	docker run -d \
+	  --name tenderflow-postgres \
+	  --network tenderflow-net \
+	  -e POSTGRES_DB=tenderflow_db \
+	  -e POSTGRES_USER=postgres \
+	  -e POSTGRES_PASSWORD=1111 \
+	  -p 5432:5432 \
+	  -v tenderflow_pgdata:/var/lib/postgresql/data \
+	  postgres:17 
+	  
+	i will find this reponse =
+	
+	Unable to find image 'postgres:17' locally
+	17: Pulling from library/postgres
+	8c7716127147: Pull complete
+	de7816569160: Pull complete
+	1ed9605b075e: Pull complete
+	ba692dbf22b7: Pull complete
+	d5d1559014a5: Pull complete
+	f6a82cec6433: Pull complete
+	ce1f028def8f: Pull complete
+	be8c3c303f61: Pull complete
+	2a9905500c81: Pull complete
+	95861f01fbc3: Pull complete
+	9138844e74a6: Pull complete
+	29da297fd253: Pull complete
+	4664e556e90a: Pull complete
+	8d6e0d53c584: Pull complete
+	Digest: sha256:e6a4209d1a4893f2df3bdcde58f8926c3c929c4d51df90990ed1b36d83c1382a
+	
+3) i need to do 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ mvn clean package -DskipTests 
+	
+4) i will create container for my application 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker build -t tenderflow-app .
+	
+5) and i need to execute this commande 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker run -d --name tenderflow-app --network tenderflow-net -p 8081:8081 tenderflow-app
+	
+	and i find this reponse : 5ad527b8fd02ae2cbe14896d0ca99095a26adb7d482fda6a51a950ee36d51737
+	
+6) so i execute this commande 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker ps -a
+	
+	and i find this reponse = 
+	
+	CONTAINER ID   IMAGE            COMMAND                  CREATED          STATUS          PORTS                    NAMES
+	5ad527b8fd02   tenderflow-app   "java -jar /app.jar"     39 seconds ago   Up 38 seconds   0.0.0.0:8081->8081/tcp   tenderflow-app
+	fd66d4289999   postgres:17      "docker-entrypoint.s…"   4 minutes ago    Up 4 minutes    0.0.0.0:5432->5432/tcp   tenderflow-postgres
+	
+7) i need to test my network 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker network ls
+	
+	and this is the response = 
+	NETWORK ID     NAME                            DRIVER    SCOPE
+	b878dd3bdb05   bridge                          bridge    local
+	7222a034b6da   host                            host      local
+	30f92e49debb   kafka-project_default           bridge    local
+	6946429741fc   networkmysql                    bridge    local
+	fbdb31e2655d   networkmysqlproduit             bridge    local
+	cd02592cfa9a   none                            null      local
+	3c99abc48b3b   tenderflow-net                  bridge    local
+	f75d7c32d0ed   tenderflow_tenderflow-network   bridge    local
+	
+8) i will check network 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker network inspect tenderflow-net
+	
+	this is the reponse = 
+	
+	[
+	    {
+	        "Name": "tenderflow-net",
+	        "Id": "3c99abc48b3b401712fe5643aa7201153186e932b3dc8b73567d410218acef4a",
+	        "Created": "2025-10-19T12:04:29.615737764Z",
+	        "Scope": "local",
+	        "Driver": "bridge",
+	        "EnableIPv6": false,
+	        "IPAM": {
+	            "Driver": "default",
+	            "Options": {},
+	            "Config": [
+	                {
+	                    "Subnet": "172.22.0.0/16",
+	                    "Gateway": "172.22.0.1"
+	                }
+	            ]
+	        },
+	        "Internal": false,
+	        "Attachable": false,
+	        "Ingress": false,
+	        "ConfigFrom": {
+	            "Network": ""
+	        },
+	        "ConfigOnly": false,
+	        "Containers": {
+	            "5ad527b8fd02ae2cbe14896d0ca99095a26adb7d482fda6a51a950ee36d51737": {
+	                "Name": "tenderflow-app",
+	                "EndpointID": "957b5efa9bf6c1ecdd4c6e6f27d696c1db1ccee660d10ef4b78c4abb12f702b9",
+	                "MacAddress": "02:42:ac:16:00:03",
+	                "IPv4Address": "172.22.0.3/16",
+	                "IPv6Address": ""
+	            },
+	            "fd66d42899993ee00673f14db0af6fef02c48bd701aaf4c954d76114b933afb7": {
+	                "Name": "tenderflow-postgres",
+	                "EndpointID": "d0f02cea09249193d621890dd8049b1c3217fb1a8b8895ea5659425b3470f850",
+	                "MacAddress": "02:42:ac:16:00:02",
+	                "IPv4Address": "172.22.0.2/16",
+	                "IPv6Address": ""
+	            }
+	        },
+	        "Options": {},
+	        "Labels": {}
+	    }
+	]
+	
+	
+9) i will do restart 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker restart tenderflow-app
+	
+	this is the reponse = 
+	tenderflow-app
+	
+10) i repeate this commande 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker ps
+	CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS          PORTS                    NAMES
+	5ad527b8fd02   tenderflow-app   "java -jar /app.jar"     3 minutes ago   Up 26 seconds   0.0.0.0:8081->8081/tcp   tenderflow-app
+	fd66d4289999   postgres:17      "docker-entrypoint.s…"   7 minutes ago   Up 7 minutes    0.0.0.0:5432->5432/tcp   tenderflow-postgres
+	
+11) i will see the logs 
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker logs -f tenderflow-app
+	
+	and the reponse is : the application is runing
+	
+12) now i can do the test in postman
+
+13) if i want check my database 
+
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ docker exec -it tenderflow-postgres psql -U postgres -d tenderflow_db
+	
+	after i execute this commande : \dt
+	
+	the reponse is 
+	
+	tenderflow_db=# \dt
+	              List of relations
+	 Schema |       Name       | Type  |  Owner
+	--------+------------------+-------+----------
+	 public | tender_documents | table | postgres
+	 public | tender_status    | table | postgres
+	 public | tenders          | table | postgres
+	(3 rows)
+	
+14) for example i want to do select in table 
+	tenderflow_db=# SELECT * FROM tender_status;
+	
+	the response is : 
+	tenderflow_db=# SELECT * FROM tender_status;
+	 id |    name
+	----+-------------
+	  1 | Préqualifié
+	  
+	  
+15) in case i delete my container i lose all data so i need to create a volume fo store all data so what i need to do is : 
+	- delete the first containe for postgresql: 
+		- docker rm -f  tenderflow-postgres
+	- recreate another contaire for postgres but with volume 
+		c:\ProjectPersonel\TenderFlow (main -> origin)
+		λ docker run -d --name tenderflow-postgres --network tenderflow-net -e POSTGRES_DB=tenderflow_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=1111 -p 5432:5432 -v tenderflow_pgdata:/var/lib/postgresql/data postgres:17
+	- like this i don't lose my data 
+	
+13) i will do again 
+	docker restart tenderflow-app
+	
+	after 
+	docker logs -f tenderflow-app
+	
+	
+		
+	  
+
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+
+

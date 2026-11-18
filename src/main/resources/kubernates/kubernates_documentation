@@ -1,0 +1,267 @@
+
+
+Documentation — Déploiement d’un projet Spring Boot + PostgreSQL sur Minikube & OpenLens
+
+Prérequis
+Avant de commencer, installer :
+	- Docker Desktop
+	- Minikube
+	- Kubectl
+	- OpenLens (ou Lens)
+	- Git (optionnel)
+	
+1. Démarrer Minikube:
+	minikube start
+	
+	Si tu veux vérifier l’état du cluster :
+		kubectl get nodes
+	
+2. Charger l’image Docker dans Minikube
+	Construire l'image de ton application Spring Boot :
+		docker build -t tenderflow-app:latest .
+	
+	Charger l'image dans Minikube :
+		minikube image load tenderflow-app:latest
+	
+	Vérifier :
+		minikube image ls | findstr tenderflow
+		
+	Tu dois voir :
+		docker.io/library/tenderflow-app:latest
+		
+3. Créer le dossier Kubernetes
+	Dans ton projet :
+		/TenderFlow
+   			/k8s
+		      postgres-pv.yaml
+		      postgres-pvc.yaml
+		      postgres-deployment.yaml
+		      postgres-service.yaml
+		      tenderflow-deployment.yaml
+		      tenderflow-service.yaml	
+		      
+4. Création du Persistent Volume (PV)
+	postgres-pv.yaml : 
+		apiVersion: v1
+		kind: PersistentVolume
+		metadata:
+		  name: tenderflow-postgres-pv
+		spec:
+		  capacity:
+		    storage: 1Gi
+		  accessModes:
+		    - ReadWriteOnce
+		  hostPath:
+		    path: /mnt/data/tenderflow-postgres	
+	
+	Appliquer :
+		kubectl apply -f postgres-pv.yaml
+		
+5. Création du Persistent Volume Claim (PVC)
+	postgres-pvc.yaml:
+		apiVersion: v1
+		kind: PersistentVolumeClaim
+		metadata:
+		  name: tenderflow-postgres-pvc
+		spec:
+		  accessModes:
+		    - ReadWriteOnce
+		  resources:
+		    requests:
+		      storage: 1Gi		
+	
+	Appliquer :
+		kubectl apply -f postgres-pvc.yaml
+		
+6. Déploiement PostgreSQL
+		postgres-deployment.yaml :
+		apiVersion: apps/v1
+		kind: Deployment
+		metadata:
+		  name: tenderflow-postgres
+		spec:
+		  replicas: 1
+		  selector:
+		    matchLabels:
+		      app: tenderflow-postgres
+		  template:
+		    metadata:
+		      labels:
+		        app: tenderflow-postgres
+		    spec:
+		      containers:
+		        - name: tenderflow-postgres
+		          image: postgres:17
+		          env:
+		            - name: POSTGRES_DB
+		              value: tenderflow_db
+		            - name: POSTGRES_USER
+		              value: postgres
+		            - name: POSTGRES_PASSWORD
+		              value: "1111"
+		          ports:
+		            - containerPort: 5432
+		          volumeMounts:
+		            - name: postgres-storage
+		              mountPath: /var/lib/postgresql/data
+		      volumes:
+		        - name: postgres-storage
+		          persistentVolumeClaim:
+		            claimName: tenderflow-postgres-pvc	
+	            
+	            
+	postgres-service.yaml :
+		apiVersion: v1
+		kind: Service
+		metadata:
+		  name: tenderflow-postgres
+		spec:
+		  selector:
+		    app: tenderflow-postgres
+		  ports:
+		    - protocol: TCP
+		      port: 5432
+		      targetPort: 5432
+		      
+	Appliquer :		
+		kubectl apply -f postgres-deployment.yaml
+		kubectl apply -f postgres-service.yaml
+		
+7. Déploiement de l’application Spring Boot
+	tenderflow-deployment.yaml :
+		apiVersion: apps/v1
+		kind: Deployment
+		metadata:
+		  name: tenderflow-app
+		spec:
+		  replicas: 1
+		  selector:
+		    matchLabels:
+		      app: tenderflow-app
+		  template:
+		    metadata:
+		      labels:
+		        app: tenderflow-app
+		    spec:
+		      containers:
+		        - name: tenderflow-app
+		          image: tenderflow-app:latest
+		          ports:
+		            - containerPort: 8081
+		          env:
+		            - name: SPRING_DATASOURCE_URL
+		              value: jdbc:postgresql://tenderflow-postgres:5432/tenderflow_db
+		            - name: SPRING_DATASOURCE_USERNAME
+		              value: postgres
+		            - name: SPRING_DATASOURCE_PASSWORD
+		              value: "1111"	
+	
+	tenderflow-service.yaml : 
+		apiVersion: v1
+		kind: Service
+		metadata:
+		  name: tenderflow-service
+		spec:
+		  type: NodePort
+		  selector:
+		    app: tenderflow-app
+		  ports:
+		    - port: 8081
+		      targetPort: 8081
+		      nodePort: 30325
+		      
+	Appliquer :
+		kubectl apply -f tenderflow-deployment.yaml
+		kubectl apply -f tenderflow-service.yaml
+		
+8. Vérifier les pods :
+	kubectl get pods
+	
+	Tu dois voir :
+		tenderflow-app-xxxx      Running
+		tenderflow-postgres-xxxx Running
+		
+9. Accéder à ton application
+	Récupérer l'URL :
+		minikube service tenderflow-service
+		
+	Un tunnel s’ouvre et tu accèdes à :
+		http://127.0.0.1:XXXXX
+	ou
+		http://192.168.49.2:30325	
+
+10. Visualiser dans OpenLens
+		- Ouvrir OpenLens
+		- Clique sur Kubernetes Cluster → Local kubeconfigs
+		- Clique sur +
+		- Choisis Add kubeconfig from filesystem
+		- Sélectionne :	
+			C:\Users\PC\.kube\config
+			
+	Lens affiche maintenant :
+		Pods
+		Services
+		Deployments
+		Storage
+		Logs
+		Terminal dans chaque pod
+		
+11. Résultat
+
+Tu as maintenant :
+	✔ PostgreSQL avec stockage persistant
+	✔ Ton app Spring Boot déployée et fonctionnelle
+	✔ Minikube + Docker bien configurés
+	✔ OpenLens pour gérer le cluster
+	✔ Une plateforme reproductible et stable
+			
+			    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

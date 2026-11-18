@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenderflow-app
+  labels:
+    app: tenderflow-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tenderflow-app
+  template:
+    metadata:
+      labels:
+        app: tenderflow-app
+    spec:
+      containers:
+        - name: tenderflow-app
+          image: tenderflow-app:latest              # Image locale chargée dans Minikube
+          imagePullPolicy: IfNotPresent             # ✅ Pour utiliser l'image locale sans pull externe
+          ports:
+            - containerPort: 8081                   # Port de ton app Spring Boot
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://tenderflow-postgres:5432/tenderflow_db
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "1111"
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: update
+            - name: SPRING_JPA_SHOW_SQL
+              value: "true"
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL
+              value: "true"
+            - name: IDENTITY_SERVICE_URL
+              value: http://identity-service:8082   # IdentityService Service name in the cluster
+            - name: TENDERFLOW_OPEN_STATUS_NAME
+              value: OPEN

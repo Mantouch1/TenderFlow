@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: tenderflow-postgres-pv
+spec:
+  capacity:
+    storage: 1Gi                     # taille du volume
+  accessModes:
+    - ReadWriteOnce                  # accès en lecture/écriture par un seul pod
+  hostPath:
+    path: /data/tenderflow-postgres  # chemin sur le disque de Minikube

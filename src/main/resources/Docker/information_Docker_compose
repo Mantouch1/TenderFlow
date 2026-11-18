@@ -1,0 +1,121 @@
+
+C:\Users\PC\Desktop\cmder
+λ cd C:\Pro
+Program Files\  Program Files (x86)\  ProgramData\  ProjectPersonel\
+C:\Users\PC\Desktop\cmder
+λ cd C:\ProjectPersonel\TenderFlow\
+
+C:\ProjectPersonel\TenderFlow (main -> origin)
+λ docker compose build		# avec cette maniere tu peut cree une image dans docker en utilisant docker-compose-yml 
+time="2025-10-18T17:21:01+02:00" level=warning msg="C:\\ProjectPersonel\\TenderFlow\\docker-compose.yml: `version` is obsolete"
+[+] Building 1.6s (8/8) FINISHED                                                                                                                                                                docker:desktop-linux  => [app internal] load build definition from Dockerfile                                                                                                                                                        0.0s  => => transferring dockerfile: 358B                                                                                                                                                                            0.0s  => [app internal] load metadata for docker.io/library/openjdk:17-jdk-slim                                                                                                                                      1.4s  => [app auth] library/openjdk:pull token for registry-1.docker.io                                                                                                                                              0.0s  => [app internal] load .dockerignore                                                                                                                                                                           0.0s  => => transferring context: 2B                                                                                                                                                                                 0.0s  => [app internal] load build context                                                                                                                                                                           0.0s  => => transferring context: 86B                                                                                                                                                                                0.0s  => [app 1/2] FROM docker.io/library/openjdk:17-jdk-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f68c3f62f9774                                                                                0.0s  => CACHED [app 2/2] COPY target/TenderFlow-0.0.1-SNAPSHOT.jar app.jar                                                                                                                                          0.0s  => [app] exporting to image                                                                                                                                                                                    0.0s  => => exporting layers                                                                                                                                                                                         0.0s  => => writing image sha256:d82fccbe0e53d8bb1c6ee5aa6914eff01497a6fec5016f85986189481bc4d984                                                                                                                    0.0s  => => naming to docker.io/library/tenderflow-app                                                                                                                                                               0.0s
+
+C:\ProjectPersonel\TenderFlow (main -> origin)
+λ docker compose up			# avec cette commande tu va lancer le service "UP"			
+time="2025-10-18T17:21:10+02:00" level=warning msg="C:\\ProjectPersonel\\TenderFlow\\docker-compose.yml: `version` is obsolete"
+[+] Running 15/15
+ ✔ postgres Pulled                                                                                                                                                                                             84.5s
+   ✔ 8c7716127147 Pull complete                                                                                                                                                                                27.1s
+   ✔ de7816569160 Pull complete                                                                                                                                                                                27.2s
+   ✔ 1ed9605b075e Pull complete                                                                                                                                                                                27.5s
+   ✔ ba692dbf22b7 Pull complete                                                                                                                                                                                27.6s
+   ✔ d5d1559014a5 Pull complete                                                                                                                                                                                28.3s
+   ✔ f6a82cec6433 Pull complete                                                                                                                                                                                28.4s
+   ✔ ce1f028def8f Pull complete                                                                                                                                                                                28.4s
+   ✔ be8c3c303f61 Pull complete                                                                                                                                                                                28.5s
+   ✔ 2a9905500c81 Pull complete                                                                                                                                                                                81.8s
+   ✔ 95861f01fbc3 Pull complete                                                                                                                                                                                81.9s
+   ✔ 9138844e74a6 Pull complete                                                                                                                                                                                81.9s
+   ✔ 29da297fd253 Pull complete                                                                                                                                                                                81.9s
+   ✔ 4664e556e90a Pull complete                                                                                                                                                                                82.0s
+   ✔ 8d6e0d53c584 Pull complete                                                                                                                                                                                82.0s [+] Running 2/2
+ ✔ Container postgres_container  Created                                                                                                                                                                        3.3s  ✔ Container TenderFlow_app      Created                                                                                                                                                                        5.9s Attaching to TenderFlow_app, postgres_container
+postgres_container  |
+postgres_container  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+postgres_container  |
+postgres_container  | 2025-10-18 15:22:45.165 UTC [1] LOG:  starting PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+postgres_container  | 2025-10-18 15:22:45.166 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+postgres_container  | 2025-10-18 15:22:45.166 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+postgres_container  | 2025-10-18 15:22:45.173 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgres_container  | 2025-10-18 15:22:45.184 UTC [29] LOG:  database system was interrupted; last known up at 2025-10-18 15:18:12 UTC
+postgres_container  | 2025-10-18 15:22:45.484 UTC [29] LOG:  database system was not properly shut down; automatic recovery in progress
+postgres_container  | 2025-10-18 15:22:45.488 UTC [29] LOG:  redo starts at 0/1982080
+postgres_container  | 2025-10-18 15:22:45.488 UTC [29] LOG:  invalid record length at 0/1982188: expected at least 24, got 0
+postgres_container  | 2025-10-18 15:22:45.489 UTC [29] LOG:  redo done at 0/1982150 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+postgres_container  | 2025-10-18 15:22:45.496 UTC [27] LOG:  checkpoint starting: end-of-recovery immediate wait
+postgres_container  | 2025-10-18 15:22:45.516 UTC [27] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.003 s, total=0.024 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB; lsn=0/1982188, redo lsn=0/1982188
+postgres_container  | 2025-10-18 15:22:45.530 UTC [1] LOG:  database system is ready to accept connections
+TenderFlow_app      |
+TenderFlow_app      |   .   ____          _            __ _ _
+TenderFlow_app      |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+TenderFlow_app      | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+TenderFlow_app      |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+TenderFlow_app      |   '  |____| .__|_| |_|_| |_\__, | / / / /
+TenderFlow_app      |  =========|_|==============|___/=/_/_/_/
+TenderFlow_app      |
+TenderFlow_app      |  :: Spring Boot ::       (v3.4.8-SNAPSHOT)
+TenderFlow_app      |
+TenderFlow_app      | 2025-10-18T15:22:47.392Z  INFO 1 --- [TenderFlow] [           main] com.Tender.TenderFlowApplication         : Starting TenderFlowApplication v0.0.1-SNAPSHOT using Java 17.0.2 with PID 1 (/app.jar started by root in /)
+TenderFlow_app      | 2025-10-18T15:22:47.409Z  INFO 1 --- [TenderFlow] [           main] com.Tender.TenderFlowApplication         : No active profile set, falling back to 1 default profile: "default"
+TenderFlow_app      | 2025-10-18T15:22:48.669Z  INFO 1 --- [TenderFlow] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+TenderFlow_app      | 2025-10-18T15:22:48.784Z  INFO 1 --- [TenderFlow] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 3 JPA repository interfaces.
+TenderFlow_app      | 2025-10-18T15:22:49.585Z  INFO 1 --- [TenderFlow] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+TenderFlow_app      | 2025-10-18T15:22:49.614Z  INFO 1 --- [TenderFlow] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+TenderFlow_app      | 2025-10-18T15:22:49.615Z  INFO 1 --- [TenderFlow] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+TenderFlow_app      | 2025-10-18T15:22:49.675Z  INFO 1 --- [TenderFlow] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+TenderFlow_app      | 2025-10-18T15:22:49.678Z  INFO 1 --- [TenderFlow] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2141 ms
+TenderFlow_app      | 2025-10-18T15:22:49.968Z  INFO 1 --- [TenderFlow] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+TenderFlow_app      | 2025-10-18T15:22:50.060Z  INFO 1 --- [TenderFlow] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+TenderFlow_app      | 2025-10-18T15:22:50.116Z  INFO 1 --- [TenderFlow] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+TenderFlow_app      | 2025-10-18T15:22:50.701Z  INFO 1 --- [TenderFlow] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+TenderFlow_app      | 2025-10-18T15:22:50.770Z  INFO 1 --- [TenderFlow] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+postgres_container  | 2025-10-18 15:22:50.994 UTC [33] WARNING:  database "tenderflow_db" has a collation version mismatch
+postgres_container  | 2025-10-18 15:22:50.994 UTC [33] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+postgres_container  | 2025-10-18 15:22:50.994 UTC [33] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+TenderFlow_app      | 2025-10-18T15:22:51.113Z  INFO 1 --- [TenderFlow] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@d70e9a
+TenderFlow_app      | 2025-10-18T15:22:51.116Z  INFO 1 --- [TenderFlow] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+TenderFlow_app      | 2025-10-18T15:22:51.182Z  WARN 1 --- [TenderFlow] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+TenderFlow_app      | 2025-10-18T15:22:51.224Z  INFO 1 --- [TenderFlow] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+postgres_container  | 2025-10-18 15:22:51.280 UTC [34] WARNING:  database "tenderflow_db" has a collation version mismatch
+TenderFlow_app      |   Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+postgres_container  | 2025-10-18 15:22:51.280 UTC [34] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+TenderFlow_app      |   Database driver: undefined/unknown
+postgres_container  | 2025-10-18 15:22:51.280 UTC [34] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+TenderFlow_app      |   Database version: 17.6
+postgres_container  | 2025-10-18 15:22:51.380 UTC [35] WARNING:  database "tenderflow_db" has a collation version mismatch
+TenderFlow_app      |   Autocommit mode: undefined/unknown
+postgres_container  | 2025-10-18 15:22:51.380 UTC [35] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+TenderFlow_app      |   Isolation level: undefined/unknown
+postgres_container  | 2025-10-18 15:22:51.380 UTC [35] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+TenderFlow_app      |   Minimum pool size: undefined/unknown
+postgres_container  | 2025-10-18 15:22:51.435 UTC [36] WARNING:  database "tenderflow_db" has a collation version mismatch
+TenderFlow_app      |   Maximum pool size: undefined/unknown
+postgres_container  | 2025-10-18 15:22:51.435 UTC [36] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+postgres_container  | 2025-10-18 15:22:51.435 UTC [36] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+postgres_container  | 2025-10-18 15:22:51.488 UTC [37] WARNING:  database "tenderflow_db" has a collation version mismatch
+postgres_container  | 2025-10-18 15:22:51.488 UTC [37] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+postgres_container  | 2025-10-18 15:22:51.488 UTC [37] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+postgres_container  | 2025-10-18 15:22:51.539 UTC [38] WARNING:  database "tenderflow_db" has a collation version mismatch
+postgres_container  | 2025-10-18 15:22:51.539 UTC [38] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+postgres_container  | 2025-10-18 15:22:51.539 UTC [38] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+postgres_container  | 2025-10-18 15:22:51.589 UTC [39] WARNING:  database "tenderflow_db" has a collation version mismatch
+postgres_container  | 2025-10-18 15:22:51.589 UTC [39] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+postgres_container  | 2025-10-18 15:22:51.589 UTC [39] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+postgres_container  | 2025-10-18 15:22:51.639 UTC [40] WARNING:  database "tenderflow_db" has a collation version mismatch
+postgres_container  | 2025-10-18 15:22:51.639 UTC [40] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+postgres_container  | 2025-10-18 15:22:51.639 UTC [40] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+TenderFlow_app      | 2025-10-18T15:22:52.890Z  INFO 1 --- [TenderFlow] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+postgres_container  | 2025-10-18 15:22:51.697 UTC [41] WARNING:  database "tenderflow_db" has a collation version mismatch
+postgres_container  | 2025-10-18 15:22:51.697 UTC [41] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+postgres_container  | 2025-10-18 15:22:51.697 UTC [41] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+postgres_container  | 2025-10-18 15:22:51.744 UTC [42] WARNING:  database "tenderflow_db" has a collation version mismatch
+postgres_container  | 2025-10-18 15:22:51.744 UTC [42] DETAIL:  The database was created using collation version 2.36, but the operating system provides version 2.41.
+postgres_container  | 2025-10-18 15:22:51.744 UTC [42] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE tenderflow_db REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+TenderFlow_app      | 2025-10-18T15:22:53.349Z  INFO 1 --- [TenderFlow] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+TenderFlow_app      | 2025-10-18T15:22:53.829Z  INFO 1 --- [TenderFlow] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+TenderFlow_app      | 2025-10-18T15:22:56.845Z  WARN 1 --- [TenderFlow] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+TenderFlow_app      | 2025-10-18T15:22:57.879Z  INFO 1 --- [TenderFlow] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+TenderFlow_app      | 2025-10-18T15:22:57.900Z  INFO 1 --- [TenderFlow] [           main] com.Tender.TenderFlowApplication         : Started TenderFlowApplication in 11.468 seconds (process running for 12.447)
+
+
+v View in Docker Desktop   o View Config   w Enable Watch

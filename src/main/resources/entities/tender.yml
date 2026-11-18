@@ -1,0 +1,46 @@
+className: Tender
+package: com.example.tenderflow.entity
+annotations:
+  - jakarta.persistence.Entity
+  - lombok.Data
+  - lombok.NoArgsConstructor
+  - lombok.AllArgsConstructor
+  - jakarta.persistence.Table
+fields:
+  - name: id
+    type: Long
+    annotations:
+      - jakarta.persistence.Id
+      - jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+
+  - name: reference
+    type: String
+
+  - name: title
+    type: String
+
+  - name: description
+    type: String
+
+  - name: status
+    type: TenderStatus
+    annotations:
+      - jakarta.persistence.ManyToOne
+      - jakarta.persistence.JoinColumn(name = "status_id")
+
+  - name: publicationDate
+    type: java.time.LocalDate
+
+  - name: deadlineDate
+    type: java.time.LocalDate
+
+  - name: createdBy
+    type: String
+
+  - name: documents
+    type: java.util.List<TenderDocument>
+    annotations:
+      - jakarta.persistence.OneToMany(mappedBy = "tender", cascade = jakarta.persistence.CascadeType.ALL)
+      
+  - name: budget
+    type: Double

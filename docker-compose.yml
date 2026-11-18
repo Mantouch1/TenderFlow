@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: tenderflow_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - tenderflow-network
+
+  app:
+    build: .
+    container_name: TenderFlow_app
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/tenderflow_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1111
+      IDENTITY_SERVICE_URL: http://identity-service:8082
+    depends_on:
+      - postgres
+    networks:
+      tenderflow-network:
+      platform-net:
+        aliases:
+          - tenderflow      # underscores are not valid in URLs: other services call http://tenderflow:8081
+
+volumes:
+  postgres_data:
+
+networks:
+  tenderflow-network:
+  platform-net:
+    external: true      # create once: docker network create platform-net

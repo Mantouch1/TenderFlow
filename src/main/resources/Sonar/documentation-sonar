@@ -1,0 +1,14 @@
+
+
+1) pour faire run sonarqube je doit executer cette commande
+	
+	C:\Users\PC\Downloads\sonarqube-25.11.0.114957\bin\windows-x86-64
+	λ StartSonar.bat
+	
+	
+	apres je lance :
+		http://localhost:9000/
+		
+2) apres j'accede a mon projet et je lance cette commande	
+	C:\ProjectPersonel\TenderFlow (main -> origin)
+	λ C:\Users\PC\Downloads\sonar-scanner-7.2.0.5079-windows-x64\bin\sonar-scanner.bat
