@@ -19,7 +19,7 @@ spec:
           image: tenderflow-app:latest              # Image locale chargée dans Minikube
           imagePullPolicy: IfNotPresent             # ✅ Pour utiliser l'image locale sans pull externe
           ports:
-            - containerPort: 8081                   # Port de ton app Spring Boot
+            - containerPort: 8090                   # Port de ton app Spring Boot
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://tenderflow-postgres:5432/tenderflow_db

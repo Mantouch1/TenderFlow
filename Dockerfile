@@ -1,11 +1,16 @@
-# Étape 1 : Utiliser OpenJDK 17 comme base
-FROM eclipse-temurin:17
+# Stage 1: build the jar inside Docker (no need to run mvn on your machine first)
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /workspace
+COPY pom.xml .
+RUN mvn -q dependency:go-offline
+COPY src ./src
+RUN mvn -q package -DskipTests
 
-# Étape 2 : Ajouter le fichier JAR au conteneur
-COPY target/TenderFlow-0.0.1-SNAPSHOT.jar app.jar
-
-# Étape 3 : Exposer le port 8090
+# Stage 2: small runtime image, non-root user
+FROM eclipse-temurin:17-jre
+RUN useradd --system --create-home appuser
+WORKDIR /app
+COPY --from=build /workspace/target/TenderFlow-0.0.1-SNAPSHOT.jar app.jar
+USER appuser
 EXPOSE 8090
-
-# Étape 4 : Commande pour exécuter l’application
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
