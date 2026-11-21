@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/TenderFlow-api-image:${{ github.run_number }}
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/tenderflow-api-image:${{ github.run_number }}
 
 
 jobs:
